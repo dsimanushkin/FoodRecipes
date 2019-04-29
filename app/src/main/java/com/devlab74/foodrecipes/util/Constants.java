@@ -16,4 +16,9 @@ public class Constants {
             "sauces"
     };
 
+    // To get App ID and App Key register for free on edamam.com
+    public static final String BASE_URL = "https://api.edamam.com";
+    public static final String APP_ID = "05799ae5";
+    public static final String APP_KEY = "315ca702e93082f266e45a0b29f1807f";
+
 }

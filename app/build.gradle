@@ -23,6 +23,7 @@ dependencies {
     def glideVersion = "4.9.0"
     def circleImageViewVersion = "3.0.0"
     def lifecycleVersion = "1.1.1"
+    def retrofitVersion = "2.5.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$supportVersion"
@@ -49,4 +50,8 @@ dependencies {
 
     //DesignSupport
     implementation "com.android.support:design:$supportVersion"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
 }
