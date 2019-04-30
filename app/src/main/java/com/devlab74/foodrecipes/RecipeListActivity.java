@@ -8,16 +8,24 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.devlab74.foodrecipes.adapters.OnRecipeListener;
 import com.devlab74.foodrecipes.adapters.RecipeRecyclerAdapter;
+import com.devlab74.foodrecipes.models.Recipe;
+import com.devlab74.foodrecipes.util.Resource;
+import com.devlab74.foodrecipes.util.Testing;
 import com.devlab74.foodrecipes.util.VerticalSpaceItemDecorator;
 import com.devlab74.foodrecipes.viewmodels.RecipeListViewModel;
 
+import java.util.List;
+
 public class RecipeListActivity extends BaseActivity implements OnRecipeListener {
+
+    private static final String TAG = "RecipeListActivity";
 
     private RecyclerView mRecyclerView;
     private RecipeRecyclerAdapter mAdapter;
@@ -40,6 +48,19 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     }
 
     private void subscribeObservers() {
+        mRecipeListViewModel.getRecipes().observe(this, new Observer<Resource<List<Recipe>>>() {
+            @Override
+            public void onChanged(@Nullable Resource<List<Recipe>> listResource) {
+                if (listResource != null) {
+                    Log.d(TAG, "onChanged: status: " + listResource.status);
+
+                    if (listResource.data != null) {
+                        Testing.printRecipes(listResource.data, "data");
+                    }
+                }
+            }
+        });
+
         mRecipeListViewModel.getViewState().observe(this, new Observer<RecipeListViewModel.ViewState>() {
             @Override
             public void onChanged(@Nullable RecipeListViewModel.ViewState viewState) {
@@ -53,6 +74,10 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                 }
             }
         });
+    }
+
+    private void searchRecipesApi(String query) {
+        mRecipeListViewModel.searchRecipesApi(query, 1);
     }
 
     private RequestManager initGlide() {
@@ -75,6 +100,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
+                searchRecipesApi(s);
                 return false;
             }
 
@@ -96,6 +122,6 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
 
     @Override
     public void onCategoryClick(String category) {
-
+        searchRecipesApi(category);
     }
 }

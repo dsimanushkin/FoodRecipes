@@ -1,24 +1,50 @@
 package com.devlab74.foodrecipes.models;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.util.Arrays;
 
+@Entity(tableName = "recipes")
 public class Recipe implements Parcelable {
 
+    @PrimaryKey
+    @NonNull
     private String uri;
+
+    @ColumnInfo(name = "label")
     private String label;
+
+    @ColumnInfo(name = "image")
     private String image;
+
+    @ColumnInfo(name = "source")
     private String source;
+
+    @ColumnInfo(name = "dietLabels")
     private String[] dietLabels;
+
+    @ColumnInfo(name = "healthLabels")
     private String[] healthLabels;
+
+    @ColumnInfo(name = "cautions")
     private String[] cautions;
+
+    @ColumnInfo(name = "ingredientLines")
     private String[] ingredientLines;
+
+    @ColumnInfo(name = "calories")
     private float calories;
     // private TotalDaily[] totalDaily;
 
-    public Recipe(String uri, String label, String image, String source, String[] dietLabels, String[] healthLabels, String[] cautions, String[] ingredientLines, float calories) {
+    @ColumnInfo(name = "timestamp")
+    private int timestamp;
+
+    public Recipe(String uri, String label, String image, String source, String[] dietLabels, String[] healthLabels, String[] cautions, String[] ingredientLines, float calories, int timestamp) {
         this.uri = uri;
         this.label = label;
         this.image = image;
@@ -28,6 +54,7 @@ public class Recipe implements Parcelable {
         this.cautions = cautions;
         this.ingredientLines = ingredientLines;
         this.calories = calories;
+        this.timestamp = timestamp;
     }
 
     public Recipe() {
@@ -43,6 +70,7 @@ public class Recipe implements Parcelable {
         cautions = in.createStringArray();
         ingredientLines = in.createStringArray();
         calories = in.readFloat();
+        timestamp = in.readInt();
     }
 
     @Override
@@ -56,6 +84,7 @@ public class Recipe implements Parcelable {
         dest.writeStringArray(cautions);
         dest.writeStringArray(ingredientLines);
         dest.writeFloat(calories);
+        dest.writeInt(timestamp);
     }
 
     @Override
@@ -147,6 +176,14 @@ public class Recipe implements Parcelable {
         this.calories = calories;
     }
 
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(int timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @Override
     public String toString() {
         return "Recipe{" +
@@ -159,6 +196,7 @@ public class Recipe implements Parcelable {
                 ", cautions=" + Arrays.toString(cautions) +
                 ", ingredientLines=" + Arrays.toString(ingredientLines) +
                 ", calories=" + calories +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }
