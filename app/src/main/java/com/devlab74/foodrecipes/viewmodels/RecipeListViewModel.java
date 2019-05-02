@@ -60,6 +60,10 @@ public class RecipeListViewModel extends AndroidViewModel {
         return pageNumber;
     }
 
+    public void setViewCategories() {
+        viewState.setValue(ViewState.CATEGORIES);
+    }
+
     public void searchRecipesApi(String query, int pageNumber, int pageRecipeFrom, int pageRecipeTo) {
         if (!isPerformingQuery) {
             if (pageNumber == 0) {
