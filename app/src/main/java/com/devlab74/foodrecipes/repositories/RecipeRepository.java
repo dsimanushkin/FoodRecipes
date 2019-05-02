@@ -39,7 +39,7 @@ public class RecipeRepository {
         recipeDao = RecipeDatabase.getInstance(context).getRecipeDao();
     }
 
-    public LiveData<Resource<List<Recipe>>> searchRecipesApi(final String query, final int pageNumber) {
+    public LiveData<Resource<List<Recipe>>> searchRecipesApi(final String query, final int pageNumber, final int pageRecipeFrom, final int pageRecipeTo) {
         return new NetworkBoundResource<List<Recipe>, RecipeSearchResponse>(AppExecutors.getInstance()) {
             @Override
             protected void saveCallResult(@NonNull RecipeSearchResponse item) {
@@ -48,9 +48,8 @@ public class RecipeRepository {
                     List<Recipe> mRecipes = new ArrayList<>();
                     for (int i = 0; i < item.getRecipes().size(); i++) {
                         mRecipes.add(item.getRecipes().get(i).getRecipe());
+                        mRecipes.get(i).setQueryFlag(query);
                     }
-                    Log.d(TAG, "saveCallResult: Im into search recipes. Recipes array size is: " + recipes.length);
-                    Log.d(TAG, "saveCallResult: Single recipe check: recipe label: " + item.getRecipes().get(0).getRecipe().getLabel());
 
                     int index = 0;
                     for (long rowId : recipeDao.insertRecipes((Recipe[])(mRecipes.toArray(recipes)))) {
@@ -61,7 +60,8 @@ public class RecipeRepository {
                                     recipes[index].getLabel(),
                                     recipes[index].getImage(),
                                     recipes[index].getSource(),
-                                    recipes[index].getCalories()
+                                    recipes[index].getCalories(),
+                                    recipes[index].getQueryFlag()
                             );
                         }
                         index++;
@@ -83,7 +83,7 @@ public class RecipeRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<RecipeSearchResponse>> createCall() {
-                return ServiceGenerator.getRecipeApi().searchRecipes(Constants.APP_ID, Constants.APP_KEY, query, 0, 29);
+                return ServiceGenerator.getRecipeApi().searchRecipes(Constants.APP_ID, Constants.APP_KEY, query, pageRecipeFrom, pageRecipeTo);
             }
         }.getAsLiveData();
     }

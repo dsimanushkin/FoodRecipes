@@ -8,6 +8,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.devlab74.foodrecipes.models.Recipe;
 import com.devlab74.foodrecipes.repositories.RecipeRepository;
@@ -17,8 +18,19 @@ import java.util.List;
 
 public class RecipeListViewModel extends AndroidViewModel {
 
+    private static final String TAG = "RecipeListViewModel";
+
+    private static final String QUERY_EXHAUSTED = "No more results.";
+
     public enum ViewState {CATEGORIES, RECIPES}
     private MutableLiveData<ViewState> viewState;
+
+    private boolean isQueryExhausted;
+    private boolean isPerformingQuery;
+    private int pageNumber;
+    private int pageRecipeFrom;
+    private int pageRecipeTo;
+    private String query;
 
     private MediatorLiveData<Resource<List<Recipe>>> recipes = new MediatorLiveData<>();
     private RecipeRepository recipeRepository;
@@ -44,13 +56,51 @@ public class RecipeListViewModel extends AndroidViewModel {
         return recipes;
     }
 
-    public void searchRecipesApi(String query, int pageNumber) {
-        final LiveData<Resource<List<Recipe>>> repositorySource = recipeRepository.searchRecipesApi(query, pageNumber);
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
+    public void searchRecipesApi(String query, int pageNumber, int pageRecipeFrom, int pageRecipeTo) {
+        if (!isPerformingQuery) {
+            if (pageNumber == 0) {
+                pageNumber = 1;
+            }
+            this.query = query.toLowerCase();
+            this.pageNumber = pageNumber;
+            this.pageRecipeFrom = pageRecipeFrom;
+            this.pageRecipeTo = pageRecipeTo;
+            isQueryExhausted = false;
+            executeSearch();
+        }
+    }
+
+    private void executeSearch() {
+        isPerformingQuery = true;
+        viewState.setValue(ViewState.RECIPES);
+
+        final LiveData<Resource<List<Recipe>>> repositorySource = recipeRepository.searchRecipesApi(query, pageNumber, pageRecipeFrom, pageRecipeTo);
 
         recipes.addSource(repositorySource, new Observer<Resource<List<Recipe>>>() {
             @Override
             public void onChanged(@Nullable Resource<List<Recipe>> listResource) {
-                recipes.setValue(listResource);
+                if (listResource != null) {
+                    recipes.setValue(listResource);
+                    if (listResource.status == Resource.Status.SUCCESS) {
+                        isPerformingQuery = false;
+                        if (listResource.data != null) {
+                            if (listResource.data.size() == 0) {
+                                Log.d(TAG, "onChanged: query is exhausted...");
+                                recipes.setValue(new Resource<List<Recipe>>(Resource.Status.ERROR, listResource.data, QUERY_EXHAUSTED));
+                            }
+                        }
+                        recipes.removeSource(repositorySource);
+                    } else if (listResource.status == Resource.Status.ERROR) {
+                        isPerformingQuery = false;
+                        recipes.removeSource(repositorySource);
+                    }
+                } else {
+                    recipes.removeSource(repositorySource);
+                }
             }
         });
     }

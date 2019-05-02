@@ -55,7 +55,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                     Log.d(TAG, "onChanged: status: " + listResource.status);
 
                     if (listResource.data != null) {
-                        Testing.printRecipes(listResource.data, "data");
+                        mAdapter.setRecipes(listResource.data);
                     }
                 }
             }
@@ -77,7 +77,7 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
     }
 
     private void searchRecipesApi(String query) {
-        mRecipeListViewModel.searchRecipesApi(query, 1);
+        mRecipeListViewModel.searchRecipesApi(query, 1, 0, 29);
     }
 
     private RequestManager initGlide() {

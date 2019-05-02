@@ -25,6 +25,9 @@ public class Recipe implements Parcelable {
     @ColumnInfo(name = "source")
     private String source;
 
+    @ColumnInfo(name = "yield")
+    private int yield;
+
     @ColumnInfo(name = "dietLabels")
     private String[] dietLabels;
 
@@ -44,17 +47,22 @@ public class Recipe implements Parcelable {
     @ColumnInfo(name = "timestamp")
     private int timestamp;
 
-    public Recipe(String uri, String label, String image, String source, String[] dietLabels, String[] healthLabels, String[] cautions, String[] ingredientLines, float calories, int timestamp) {
+    @ColumnInfo(name = "queryFlag")
+    private String queryFlag;
+
+    public Recipe(String uri, String label, String image, String source, int yield, String[] dietLabels, String[] healthLabels, String[] cautions, String[] ingredientLines, float calories, int timestamp, String queryFlag) {
         this.uri = uri;
         this.label = label;
         this.image = image;
         this.source = source;
+        this.yield = yield;
         this.dietLabels = dietLabels;
         this.healthLabels = healthLabels;
         this.cautions = cautions;
         this.ingredientLines = ingredientLines;
         this.calories = calories;
         this.timestamp = timestamp;
+        this.queryFlag = queryFlag;
     }
 
     public Recipe() {
@@ -65,12 +73,14 @@ public class Recipe implements Parcelable {
         label = in.readString();
         image = in.readString();
         source = in.readString();
+        yield = in.readInt();
         dietLabels = in.createStringArray();
         healthLabels = in.createStringArray();
         cautions = in.createStringArray();
         ingredientLines = in.createStringArray();
         calories = in.readFloat();
         timestamp = in.readInt();
+        queryFlag = in.readString();
     }
 
     @Override
@@ -79,12 +89,14 @@ public class Recipe implements Parcelable {
         dest.writeString(label);
         dest.writeString(image);
         dest.writeString(source);
+        dest.writeInt(yield);
         dest.writeStringArray(dietLabels);
         dest.writeStringArray(healthLabels);
         dest.writeStringArray(cautions);
         dest.writeStringArray(ingredientLines);
         dest.writeFloat(calories);
         dest.writeInt(timestamp);
+        dest.writeString(queryFlag);
     }
 
     @Override
@@ -136,6 +148,14 @@ public class Recipe implements Parcelable {
         this.source = source;
     }
 
+    public int getYield() {
+        return yield;
+    }
+
+    public void setYield(int yield) {
+        this.yield = yield;
+    }
+
     public String[] getDietLabels() {
         return dietLabels;
     }
@@ -169,6 +189,11 @@ public class Recipe implements Parcelable {
     }
 
     public float getCalories() {
+        if (calories != -1) {
+            if (calories != 0 && yield != 0) {
+                return calories / yield;
+            }
+        }
         return calories;
     }
 
@@ -184,6 +209,14 @@ public class Recipe implements Parcelable {
         this.timestamp = timestamp;
     }
 
+    public String getQueryFlag() {
+        return queryFlag;
+    }
+
+    public void setQueryFlag(String queryFlag) {
+        this.queryFlag = queryFlag;
+    }
+
     @Override
     public String toString() {
         return "Recipe{" +
@@ -191,12 +224,14 @@ public class Recipe implements Parcelable {
                 ", label='" + label + '\'' +
                 ", image='" + image + '\'' +
                 ", source='" + source + '\'' +
+                ", yield=" + yield +
                 ", dietLabels=" + Arrays.toString(dietLabels) +
                 ", healthLabels=" + Arrays.toString(healthLabels) +
                 ", cautions=" + Arrays.toString(cautions) +
                 ", ingredientLines=" + Arrays.toString(ingredientLines) +
                 ", calories=" + calories +
                 ", timestamp=" + timestamp +
+                ", queryFlag='" + queryFlag + '\'' +
                 '}';
     }
 }

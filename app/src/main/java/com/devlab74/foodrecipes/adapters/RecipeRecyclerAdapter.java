@@ -17,6 +17,7 @@ import java.util.List;
 public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int CATEGORY_TYPE = 1;
+    private static final int RECIPE_TYPE = 2;
 
     private List<Recipe> mRecipes;
     private OnRecipeListener onRecipeListener;
@@ -37,17 +38,24 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_category_list_item, viewGroup, false);
                 return new CategoryViewHolder(view, onRecipeListener, requestManager);
             }
+            case RECIPE_TYPE: {
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_recipe_list_item, viewGroup, false);
+                return new RecipeViewHolder(view, onRecipeListener, requestManager);
+            }
+            default: {
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_recipe_list_item, viewGroup, false);
+                return new RecipeViewHolder(view, onRecipeListener, requestManager);
+            }
         }
-
-        return null;
     }
 
     @Override
     public int getItemViewType(int position) {
         if (mRecipes.get(position).getCalories() == -1) {
             return CATEGORY_TYPE;
+        } else {
+            return RECIPE_TYPE;
         }
-        return CATEGORY_TYPE;
     }
 
     @Override
@@ -56,6 +64,8 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         int itemViewType = getItemViewType(i);
         if (itemViewType == CATEGORY_TYPE) {
             ((CategoryViewHolder)viewHolder).onBind(mRecipes.get(i));
+        } else if (itemViewType == RECIPE_TYPE) {
+            ((RecipeViewHolder)viewHolder).onBind(mRecipes.get(i));
         }
 
     }
@@ -78,6 +88,11 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             categories.add(recipe);
         }
         mRecipes = categories;
+        notifyDataSetChanged();
+    }
+
+    public void setRecipes(List<Recipe> mRecipes) {
+        this.mRecipes = mRecipes;
         notifyDataSetChanged();
     }
 }

@@ -21,10 +21,10 @@ public interface RecipeDao {
     @Insert(onConflict = REPLACE)
     void insertRecipe(Recipe recipe);
 
-    @Query("UPDATE recipes SET label = :label, image = :image, source = :source, calories = :calories WHERE uri = :uri")
-    void updateRecipe(String uri, String label, String image, String source, float calories);
+    @Query("UPDATE recipes SET label = :label, image = :image, source = :source, calories = :calories, queryFlag = :queryFlag WHERE uri = :uri")
+    void updateRecipe(String uri, String label, String image, String source, float calories, String queryFlag);
 
-    @Query("SELECT * FROM recipes WHERE label LIKE '%' || :query || '%' OR ingredientLines LIKE '%' || :query || '%' ORDER BY calories DESC LIMIT (:pageNumber * 30)")
+    @Query("SELECT * FROM recipes WHERE queryFlag = :query ORDER BY calories DESC LIMIT (:pageNumber * 30)")
     LiveData<List<Recipe>> searchRecipes(String query, int pageNumber);
 
     @Query("SELECT * FROM recipes WHERE uri = :uri")
