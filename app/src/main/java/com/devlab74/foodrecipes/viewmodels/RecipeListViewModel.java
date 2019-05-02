@@ -74,6 +74,15 @@ public class RecipeListViewModel extends AndroidViewModel {
         }
     }
 
+    public void searchNextPage() {
+        if (!isQueryExhausted && !isPerformingQuery) {
+            pageNumber++;
+            pageRecipeFrom += 30;
+            pageRecipeTo += 30;
+            executeSearch();
+        }
+    }
+
     private void executeSearch() {
         isPerformingQuery = true;
         viewState.setValue(ViewState.RECIPES);
