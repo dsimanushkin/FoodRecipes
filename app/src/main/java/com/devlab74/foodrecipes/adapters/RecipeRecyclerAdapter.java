@@ -19,6 +19,7 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private static final int CATEGORY_TYPE = 1;
     private static final int RECIPE_TYPE = 2;
     private static final int LOADING_TYPE = 3;
+    private static final int EXHAUSTED_TYPE = 4;
 
     private List<Recipe> mRecipes;
     private OnRecipeListener onRecipeListener;
@@ -47,6 +48,10 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_loading_list_item, viewGroup, false);
                 return new LoadingViewHolder(view);
             }
+            case EXHAUSTED_TYPE: {
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_search_exhausted, viewGroup, false);
+                return new SearchExhaustedViewHolder(view);
+            }
             default: {
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_recipe_list_item, viewGroup, false);
                 return new RecipeViewHolder(view, onRecipeListener, requestManager);
@@ -60,6 +65,8 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             return CATEGORY_TYPE;
         } else if (mRecipes.get(position).getLabel().equals("LOADING...")) {
             return LOADING_TYPE;
+        } else if (mRecipes.get(position).getLabel().equals("EXHAUSTED...")) {
+            return EXHAUSTED_TYPE;
         } else {
             return RECIPE_TYPE;
         }
@@ -147,6 +154,14 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
             notifyDataSetChanged();
         }
+    }
+
+    public void setQueryExhausted() {
+        hideLoading();
+        Recipe exhaustedRecipe = new Recipe();
+        exhaustedRecipe.setLabel("EXHAUSTED...");
+        mRecipes.add(exhaustedRecipe);
+        notifyDataSetChanged();
     }
 
     public void setRecipes(List<Recipe> mRecipes) {

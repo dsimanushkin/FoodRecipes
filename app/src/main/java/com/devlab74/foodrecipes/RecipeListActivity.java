@@ -3,7 +3,6 @@ package com.devlab74.foodrecipes;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,11 +17,12 @@ import com.devlab74.foodrecipes.adapters.OnRecipeListener;
 import com.devlab74.foodrecipes.adapters.RecipeRecyclerAdapter;
 import com.devlab74.foodrecipes.models.Recipe;
 import com.devlab74.foodrecipes.util.Resource;
-import com.devlab74.foodrecipes.util.Testing;
 import com.devlab74.foodrecipes.util.VerticalSpaceItemDecorator;
 import com.devlab74.foodrecipes.viewmodels.RecipeListViewModel;
 
 import java.util.List;
+
+import static com.devlab74.foodrecipes.viewmodels.RecipeListViewModel.QUERY_EXHAUSTED;
 
 public class RecipeListActivity extends BaseActivity implements OnRecipeListener {
 
@@ -72,6 +72,9 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                                 mAdapter.hideLoading();
                                 mAdapter.setRecipes(listResource.data);
                                 Toast.makeText(RecipeListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
+                                if (listResource.message.equals(QUERY_EXHAUSTED)) {
+                                    mAdapter.setQueryExhausted();
+                                }
                                 break;
                             }
                             case SUCCESS: {
