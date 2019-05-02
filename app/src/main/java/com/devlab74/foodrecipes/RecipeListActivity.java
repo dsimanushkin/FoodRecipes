@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -55,7 +56,32 @@ public class RecipeListActivity extends BaseActivity implements OnRecipeListener
                     Log.d(TAG, "onChanged: status: " + listResource.status);
 
                     if (listResource.data != null) {
-                        mAdapter.setRecipes(listResource.data);
+                        switch (listResource.status) {
+                            case LOADING: {
+                                if (mRecipeListViewModel.getPageNumber() > 1) {
+                                    mAdapter.displayLoading();
+                                } else {
+                                    mAdapter.displayOnltLoading();
+                                }
+                                break;
+                            }
+                            case ERROR: {
+                                Log.e(TAG, "onChanged: cannot refresh the cache");
+                                Log.e(TAG, "onChanged: ERROR message: " + listResource.message);
+                                Log.e(TAG, "onChanged: status: ERROR, #recipes: " + listResource.data.size());
+                                mAdapter.hideLoading();
+                                mAdapter.setRecipes(listResource.data);
+                                Toast.makeText(RecipeListActivity.this, listResource.message, Toast.LENGTH_SHORT).show();
+                                break;
+                            }
+                            case SUCCESS: {
+                                Log.d(TAG, "onChanged: cache has been refreshed.");
+                                Log.d(TAG, "onChanged: status: SUCCESS, #recipes:" + listResource.data.size());
+                                mAdapter.hideLoading();
+                                mAdapter.setRecipes(listResource.data);
+                                break;
+                            }
+                        }
                     }
                 }
             }

@@ -18,6 +18,7 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private static final int CATEGORY_TYPE = 1;
     private static final int RECIPE_TYPE = 2;
+    private static final int LOADING_TYPE = 3;
 
     private List<Recipe> mRecipes;
     private OnRecipeListener onRecipeListener;
@@ -42,6 +43,10 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_recipe_list_item, viewGroup, false);
                 return new RecipeViewHolder(view, onRecipeListener, requestManager);
             }
+            case LOADING_TYPE: {
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_loading_list_item, viewGroup, false);
+                return new LoadingViewHolder(view);
+            }
             default: {
                 view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_recipe_list_item, viewGroup, false);
                 return new RecipeViewHolder(view, onRecipeListener, requestManager);
@@ -53,6 +58,8 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public int getItemViewType(int position) {
         if (mRecipes.get(position).getCalories() == -1) {
             return CATEGORY_TYPE;
+        } else if (mRecipes.get(position).getLabel().equals("LOADING...")) {
+            return LOADING_TYPE;
         } else {
             return RECIPE_TYPE;
         }
@@ -89,6 +96,57 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
         mRecipes = categories;
         notifyDataSetChanged();
+    }
+
+    public void displayOnltLoading() {
+        clearRecipesList();
+        Recipe recipe = new Recipe();
+        recipe.setLabel("LOADING...");
+        mRecipes.add(recipe);
+        notifyDataSetChanged();
+    }
+
+    public void displayLoading() {
+        if (mRecipes == null) {
+            mRecipes = new ArrayList<>();
+        }
+        if (!isLoading()) {
+            Recipe recipe = new Recipe();
+            recipe.setLabel("LOADING...");
+            mRecipes.add(recipe);
+            notifyDataSetChanged();
+        }
+    }
+
+    private void clearRecipesList() {
+        if (mRecipes == null) {
+            mRecipes = new ArrayList<>();
+        } else {
+            mRecipes.clear();
+        }
+        notifyDataSetChanged();
+    }
+
+    private boolean isLoading() {
+        if (mRecipes != null) {
+            if (mRecipes.size() > 0) {
+                if (mRecipes.get(mRecipes.size() - 1).getLabel().equals("LOADING...")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void hideLoading() {
+        if (isLoading()) {
+            if (mRecipes.get(0).getLabel().equals("LOADING...")) {
+                mRecipes.remove(0);
+            } else if (mRecipes.get(mRecipes.size() - 1).equals("LOADING...")) {
+                mRecipes.remove(mRecipes.size() - 1);
+            }
+            notifyDataSetChanged();
+        }
     }
 
     public void setRecipes(List<Recipe> mRecipes) {
