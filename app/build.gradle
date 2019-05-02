@@ -30,6 +30,7 @@ dependencies {
     def lifecycleVersion = "1.1.1"
     def retrofitVersion = "2.5.0"
     def roomVersion = "1.1.1"
+    def okhttpVersion = "3.0.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$supportVersion"
@@ -64,4 +65,7 @@ dependencies {
     // Room
     implementation "android.arch.persistence.room:runtime:$roomVersion"
     annotationProcessor "android.arch.persistence.room:compiler:$roomVersion"
+
+    // Okhttp
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
 }

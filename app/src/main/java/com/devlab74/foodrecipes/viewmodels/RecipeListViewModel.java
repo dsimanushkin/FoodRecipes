@@ -32,6 +32,7 @@ public class RecipeListViewModel extends AndroidViewModel {
     private int pageRecipeTo;
     private String query;
     private boolean cancelRequest;
+    private long reqeustStartTime;
 
     private MediatorLiveData<Resource<List<Recipe>>> recipes = new MediatorLiveData<>();
     private RecipeRepository recipeRepository;
@@ -89,6 +90,7 @@ public class RecipeListViewModel extends AndroidViewModel {
     }
 
     private void executeSearch() {
+        reqeustStartTime = System.currentTimeMillis();
         cancelRequest = false;
         isPerformingQuery = true;
         viewState.setValue(ViewState.RECIPES);
@@ -102,6 +104,7 @@ public class RecipeListViewModel extends AndroidViewModel {
                     if (listResource != null) {
                         recipes.setValue(listResource);
                         if (listResource.status == Resource.Status.SUCCESS) {
+                            Log.d(TAG, "onChanged: REQUEST TIME: " + (System.currentTimeMillis() - reqeustStartTime) / 1000 + " seconds");
                             isPerformingQuery = false;
                             if (listResource.data != null) {
                                 if (listResource.data.size() == 0) {

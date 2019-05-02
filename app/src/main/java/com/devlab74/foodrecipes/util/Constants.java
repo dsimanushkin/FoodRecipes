@@ -21,4 +21,8 @@ public class Constants {
     public static final String APP_ID = "05799ae5";
     public static final String APP_KEY = "315ca702e93082f266e45a0b29f1807f";
 
+    public static final int CONNECTION_TIMEOUT = 10;
+    public static final int READ_TIMEOUT = 2;
+    public static final int WRITE_TIMEOUT = 2;
+
 }
