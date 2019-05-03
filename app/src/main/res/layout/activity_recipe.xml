@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/parent"
-    android:visibility="gone">
+    android:visibility="visible">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -26,15 +26,23 @@
             android:layout_below="@id/recipe_image"
             android:id="@+id/recipe_label"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recipe Source"
+            android:textSize="@dimen/recipe_publisher_text_size"
+            android:padding="7dp"
+            android:layout_below="@id/recipe_label"
+            android:id="@+id/recipe_source"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:orientation="horizontal"
-            android:layout_below="@id/recipe_label"
+            android:layout_below="@id/recipe_source"
             android:id="@+id/container"
-            android:weightSum="100"
-            android:visibility="gone">
+            android:weightSum="100">
 
             <RelativeLayout
                 android:layout_width="0dp"
@@ -172,8 +180,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_below="@id/cautions_container"
-            android:id="@+id/ingredients_container"
-            android:visibility="gone">
+            android:id="@+id/ingredients_container">
 
             <TextView
                 android:layout_width="wrap_content"
