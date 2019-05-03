@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.util.ViewPreloadSizeProvider;
 import com.devlab74.foodrecipes.R;
 import com.devlab74.foodrecipes.models.Recipe;
 
@@ -17,10 +18,13 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.On
     OnRecipeListener onRecipeListener;
     RequestManager requestManager;
 
-    public RecipeViewHolder(@NonNull View itemView, OnRecipeListener onRecipeListener, RequestManager requestManager) {
+    ViewPreloadSizeProvider viewPreloadSizeProvider;
+
+    public RecipeViewHolder(@NonNull View itemView, OnRecipeListener onRecipeListener, RequestManager requestManager, ViewPreloadSizeProvider preloadSizeProvider) {
         super(itemView);
         this.onRecipeListener = onRecipeListener;
         this.requestManager = requestManager;
+        viewPreloadSizeProvider = preloadSizeProvider;
 
         label = itemView.findViewById(R.id.recipe_label);
         source = itemView.findViewById(R.id.recipe_source);
@@ -38,6 +42,7 @@ public class RecipeViewHolder extends RecyclerView.ViewHolder implements View.On
         label.setText(recipe.getLabel());
         source.setText(recipe.getSource());
         calories.setText(String.valueOf(Math.round(recipe.getCalories())));
+        viewPreloadSizeProvider.setView(image);
     }
 
     @Override
