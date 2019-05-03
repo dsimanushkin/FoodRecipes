@@ -105,7 +105,7 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         notifyDataSetChanged();
     }
 
-    public void displayOnltLoading() {
+    public void displayOnlyLoading() {
         clearRecipesList();
         Recipe recipe = new Recipe();
         recipe.setLabel("LOADING...");
@@ -167,5 +167,14 @@ public class RecipeRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void setRecipes(List<Recipe> mRecipes) {
         this.mRecipes = mRecipes;
         notifyDataSetChanged();
+    }
+
+    public Recipe getSelectedRecipe(int position) {
+        if (mRecipes != null) {
+            if (mRecipes.size() > 0) {
+                return mRecipes.get(position);
+            }
+        }
+        return null;
     }
 }
