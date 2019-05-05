@@ -42,15 +42,11 @@ public class Recipe implements Parcelable {
 
     @ColumnInfo(name = "calories")
     private float calories;
-    // private TotalDaily[] totalDaily;
-
-    @ColumnInfo(name = "timestamp")
-    private int timestamp;
 
     @ColumnInfo(name = "queryFlag")
     private String queryFlag;
 
-    public Recipe(String uri, String label, String image, String source, int yield, String[] dietLabels, String[] healthLabels, String[] cautions, String[] ingredientLines, float calories, int timestamp, String queryFlag) {
+    public Recipe(String uri, String label, String image, String source, int yield, String[] dietLabels, String[] healthLabels, String[] cautions, String[] ingredientLines, float calories, String queryFlag) {
         this.uri = uri;
         this.label = label;
         this.image = image;
@@ -61,7 +57,6 @@ public class Recipe implements Parcelable {
         this.cautions = cautions;
         this.ingredientLines = ingredientLines;
         this.calories = calories;
-        this.timestamp = timestamp;
         this.queryFlag = queryFlag;
     }
 
@@ -79,7 +74,6 @@ public class Recipe implements Parcelable {
         cautions = in.createStringArray();
         ingredientLines = in.createStringArray();
         calories = in.readFloat();
-        timestamp = in.readInt();
         queryFlag = in.readString();
     }
 
@@ -95,7 +89,6 @@ public class Recipe implements Parcelable {
         dest.writeStringArray(cautions);
         dest.writeStringArray(ingredientLines);
         dest.writeFloat(calories);
-        dest.writeInt(timestamp);
         dest.writeString(queryFlag);
     }
 
@@ -201,14 +194,6 @@ public class Recipe implements Parcelable {
         this.calories = calories;
     }
 
-    public int getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(int timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public String getQueryFlag() {
         return queryFlag;
     }
@@ -230,7 +215,6 @@ public class Recipe implements Parcelable {
                 ", cautions=" + Arrays.toString(cautions) +
                 ", ingredientLines=" + Arrays.toString(ingredientLines) +
                 ", calories=" + calories +
-                ", timestamp=" + timestamp +
                 ", queryFlag='" + queryFlag + '\'' +
                 '}';
     }

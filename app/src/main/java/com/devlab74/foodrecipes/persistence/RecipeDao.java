@@ -24,10 +24,6 @@ public interface RecipeDao {
     @Query("UPDATE recipes SET label = :label, image = :image, source = :source, calories = :calories, queryFlag = :queryFlag WHERE uri = :uri")
     void updateRecipe(String uri, String label, String image, String source, float calories, String queryFlag);
 
-    @Query("SELECT * FROM recipes WHERE queryFlag = :query ORDER BY calories DESC LIMIT (:pageNumber * 30)")
+    @Query("SELECT * FROM recipes WHERE queryFlag = :query LIMIT (:pageNumber * 29)")
     LiveData<List<Recipe>> searchRecipes(String query, int pageNumber);
-
-    @Query("SELECT * FROM recipes WHERE uri = :uri")
-    LiveData<Recipe> getRecipe(String uri);
-
 }

@@ -83,7 +83,7 @@ public class RecipeRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<RecipeSearchResponse>> createCall() {
-                return ServiceGenerator.getRecipeApi().searchRecipes(Constants.APP_ID, Constants.APP_KEY, query, pageRecipeFrom, pageRecipeTo);
+                return ServiceGenerator.getRecipeApi().searchRecipes(Constants.APP_ID, Constants.APP_KEY, query, String.valueOf(pageRecipeFrom), String.valueOf(pageRecipeTo));
             }
         }.getAsLiveData();
     }

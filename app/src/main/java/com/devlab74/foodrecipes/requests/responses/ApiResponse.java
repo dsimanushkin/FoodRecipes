@@ -1,12 +1,17 @@
 package com.devlab74.foodrecipes.requests.responses;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import retrofit2.Response;
 
 public class ApiResponse<T> {
 
+    private static final String TAG = "ApiResponse";
+
     public ApiResponse<T> create(Throwable error) {
+        Log.d(TAG, "create: " + error);
         return new ApiErrorResponse<>(error.getMessage().equals("") ? error.getMessage() : "Unknown error.\nCheck network connection.");
     }
 

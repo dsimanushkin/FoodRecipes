@@ -3,9 +3,13 @@ package com.devlab74.foodrecipes.requests;
 import com.devlab74.foodrecipes.util.Constants;
 import com.devlab74.foodrecipes.util.LiveDataCallAdapterFactory;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -20,6 +24,19 @@ public class ServiceGenerator {
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
             .retryOnConnectionFailure(false)
+            .addInterceptor(new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    Request original = chain.request();
+
+                    Request request = original.newBuilder()
+                            .header("Connection", "close")
+                            .method(original.method(), original.body())
+                            .build();
+
+                    return chain.proceed(request);
+                }
+            })
             .build();
 
     private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()

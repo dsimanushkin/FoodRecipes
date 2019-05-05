@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -19,6 +20,7 @@ public class RecipeActivity extends BaseActivity {
     private static final String TAG = "RecipeActivity";
 
     private AppCompatImageView mRecipeImage;
+    private ImageView mRecipeBackArrow;
     private TextView mRecipeLabel, mRecipeSource,mRecipeCalories, mRecipeServings, mRecipeIngredientsTitle;
     private LinearLayout mRecipeDietList, mRecipeHealthList, mRecipeCautionsList, mRecipeIngredientsList;
     private RelativeLayout mRecipeDietContainer, mRecipeHealthContainer, mRecipeCautionsContainer;
@@ -30,6 +32,7 @@ public class RecipeActivity extends BaseActivity {
         setContentView(R.layout.activity_recipe);
 
         mRecipeImage = findViewById(R.id.recipe_image);
+        mRecipeBackArrow = findViewById(R.id.back_arrow);
         mRecipeLabel = findViewById(R.id.recipe_label);
         mRecipeSource = findViewById(R.id.recipe_source);
         mRecipeCalories = findViewById(R.id.recipe_calories);
@@ -45,6 +48,7 @@ public class RecipeActivity extends BaseActivity {
         mParent = findViewById(R.id.parent);
 
         getIncomingIntent();
+        setOnClickListeners();
     }
 
     private void getIncomingIntent() {
@@ -137,7 +141,7 @@ public class RecipeActivity extends BaseActivity {
         if (ingredients != null) {
             for (String label : ingredients) {
                 TextView textView = new TextView(this);
-                textView.setText(label);
+                textView.setText("- " + label);
                 textView.setTextSize(15);
                 textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 mRecipeIngredientsList.addView(textView);
@@ -147,5 +151,14 @@ public class RecipeActivity extends BaseActivity {
 
     private void showParent() {
         mParent.setVisibility(View.VISIBLE);
+    }
+
+    private void setOnClickListeners() {
+        mRecipeBackArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 }

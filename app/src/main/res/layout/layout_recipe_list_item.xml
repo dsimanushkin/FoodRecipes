@@ -39,18 +39,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/recipe_title_text_size"
+                        android:textSize="@dimen/recipe_20sp_text_size"
                         android:textColor="#000"
-                        android:id="@+id/recipe_label"
-                        android:text="Recipe Title"/>
+                        android:id="@+id/recipe_label"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="@dimen/recipe_publisher_text_size"
+                        android:textSize="@dimen/recipe_16sp_text_size"
                         android:gravity="start"
                         android:id="@+id/recipe_source"
-                        android:text="Some Recipe source"
                         android:layout_below="@id/recipe_label"/>
 
                 </RelativeLayout>
@@ -65,17 +63,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="100"
                         android:textColor="@color/red"
-                        android:textSize="@dimen/recipe_publisher_text_size"
+                        android:textSize="@dimen/recipe_16sp_text_size"
                         android:layout_centerHorizontal="true"
                         android:id="@+id/recipe_calories"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Calories"
-                        android:textSize="@dimen/recipe_publisher_text_size"
+                        android:text="@string/layout_recipe_calories_label"
+                        android:textSize="@dimen/recipe_16sp_text_size"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@id/recipe_calories"/>
 
