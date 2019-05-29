@@ -15,3 +15,16 @@ Features:
 11. Menu
 12. RecyclerView with custom Adapters 
 13. Passing data between activities using Parcels
+
+
+Libraries that was used in this project:
+
+1. DesignSupport (https://developer.android.com/topic/libraries/support-library/packages)
+2. RecyclerView (https://developer.android.com/topic/libraries/support-library/packages)
+3. CardView (https://developer.android.com/topic/libraries/support-library/packages)
+4. Lifecycle (https://developer.android.com/topic/libraries/support-library/packages)
+5. Glide w/ RecyclerView integration (https://github.com/bumptech/glide)
+6. CircleImageView (https://github.com/hdodenhof/CircleImageView)
+7. Retrofit (https://square.github.io/retrofit/)
+8. Room (https://developer.android.com/topic/libraries/architecture/room)
+9. OkHttp3 (https://square.github.io/okhttp/)
